@@ -49,36 +49,42 @@ Auth: if `API_SECRET` is set, send `Authorization: Bearer <API_SECRET>`.
 
 ### Invalid payload
 
-Bad requests return `400` with what went wrong, what was received, and the expected shape:
+Bad requests return `400` with `issues`, `received`, and `expected.body` where **each key has a hint** (`type`, `required`, `example`, `hint`):
 
 ```json
 {
   "success": false,
   "error": "Invalid payload",
-  "issues": [
-    "Provide exactly one of url or html (non-empty string)",
-    "Unknown field(s): device. Allowed: url, html, preset, waitUntil"
-  ],
+  "issues": ["Provide exactly one of url or html (non-empty string)"],
   "received": { "device": "iPhone 14" },
   "expected": {
     "method": "POST",
     "contentType": "application/json",
     "body": {
-      "url": "https://example.com",
-      "html": null,
-      "preset": { "viewport": { "width": 1280, "height": 720 }, "…": "…" },
-      "waitUntil": "networkidle"
+      "url": {
+        "type": "string",
+        "required": "one of url | html",
+        "example": "https://example.com",
+        "hint": "Absolute http(s) page URL to open and screenshot. Mutually exclusive with html."
+      },
+      "html": { "type": "string", "hint": "…" },
+      "waitUntil": { "type": "string", "enum": ["networkidle", "load", "…"], "hint": "…" },
+      "preset": {
+        "type": "object",
+        "hint": "Inline viewport/device options for this request only…",
+        "keys": {
+          "viewport": { "type": "object", "hint": "…", "keys": { "width": { "hint": "…" }, "height": { "hint": "…" } } },
+          "deviceScaleFactor": { "type": "number", "hint": "Device pixel ratio (>= 1)…" }
+        }
+      }
     },
-    "notes": [
-      "Send either url or html (exactly one).",
-      "preset is optional; omit it to use 1280×720 desktop defaults."
-    ],
-    "response": { "success": true, "image": { "base64": "…", "dataUrl": "…" }, "…": "…" }
+    "example": { "url": "https://example.com", "preset": { "…" } },
+    "response": { "image": { "base64": { "hint": "…" }, "dataUrl": { "hint": "…" } } }
   }
 }
 ```
 
-`GET /api` returns the same expected request/response docs.
+`GET /api` returns the same hinted `expected` docs.
 
 ## Local
 

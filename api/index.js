@@ -1,10 +1,8 @@
 import { requireApiAuth } from '../lib/auth.js';
 import { applyCors } from '../lib/cors.js';
 import {
-  EXPECTED_REQUEST,
-  EXPECTED_RESPONSE,
-  PRESET_EXAMPLE,
   badPayloadResponse,
+  expectedDocs,
   validateCaptureBody,
 } from '../lib/schema.js';
 import { snappyCapture } from '../lib/snappy.js';
@@ -18,13 +16,7 @@ export default async function handler(req, res) {
       name: 'snappy',
       db: false,
       description: 'DB-less full-page screenshot API. Pass url|html + optional preset JSON.',
-      expected: {
-        method: 'POST',
-        contentType: 'application/json',
-        body: EXPECTED_REQUEST,
-        response: EXPECTED_RESPONSE,
-        preset: PRESET_EXAMPLE,
-      },
+      expected: expectedDocs(),
     });
   }
 
@@ -33,11 +25,7 @@ export default async function handler(req, res) {
       success: false,
       error: 'Method not allowed',
       issues: [`Got ${req.method}; use POST`],
-      expected: {
-        method: 'POST',
-        contentType: 'application/json',
-        body: EXPECTED_REQUEST,
-      },
+      expected: expectedDocs(),
     });
   }
 
@@ -72,10 +60,7 @@ export default async function handler(req, res) {
       success: false,
       error: 'Snappy capture failed',
       details: error.message,
-      expected: {
-        body: EXPECTED_REQUEST,
-        response: EXPECTED_RESPONSE,
-      },
+      expected: expectedDocs(),
     });
   }
 }
