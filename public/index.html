@@ -24,17 +24,22 @@
         padding: 1rem;
         border-radius: 8px;
         overflow: auto;
+        font-size: 0.85rem;
       }
     </style>
   </head>
   <body>
     <h1>Snappy</h1>
-    <p>Full-page screenshot API. Send a URL or HTML; get a PNG of the full scrolled page.</p>
+    <p>DB-less full-page screenshots. Pass URL or HTML + preset JSON. Returns portable base64 (optional Cloudinary upload).</p>
     <p>POST <code>/api</code></p>
     <pre>{
   "url": "https://example.com",
-  "device": "iPhone 14",
-  "response": "url"
+  "preset": {
+    "viewport": { "width": 390, "height": 844 },
+    "deviceScaleFactor": 3,
+    "isMobile": true
+  },
+  "upload": false
 }</pre>
   </body>
 </html>

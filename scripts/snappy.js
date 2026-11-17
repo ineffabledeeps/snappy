@@ -6,23 +6,17 @@ loadEnv();
 
 const args = process.argv.slice(2);
 const url = args.find((a) => !a.startsWith('--')) || 'https://example.com';
-const device = args.find((a) => a.startsWith('--device='))?.slice('--device='.length) || null;
 const out = args.find((a) => a.startsWith('--out='))?.slice('--out='.length) || 'snappy-out.png';
-const upload = !args.includes('--no-upload');
+const upload = args.includes('--upload');
 
-const result = await snappyCapture({ url, device, upload });
+let preset = null;
+const presetArg = args.find((a) => a.startsWith('--preset='))?.slice('--preset='.length);
+if (presetArg) {
+  preset = JSON.parse(presetArg);
+}
+
+const result = await snappyCapture({ url, preset, upload });
 await writeFile(out, result.buffer);
 
-console.log(
-  JSON.stringify(
-    {
-      ok: true,
-      out,
-      imageUrl: result.imageUrl,
-      viewport: result.viewport,
-      durationMs: result.durationMs,
-    },
-    null,
-    2,
-  ),
-);
+const { buffer: _buf, ...json } = result;
+console.log(JSON.stringify({ ...json, out }, null, 2));
