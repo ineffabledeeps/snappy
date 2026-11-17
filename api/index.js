@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     return res.status(400).json(badPayloadResponse(validation));
   }
 
-  const { url, html, preset, waitUntil, upload } = validation.value;
+  const { url, html, preset, waitUntil } = validation.value;
 
   try {
     const result = await snappyCapture({
@@ -54,7 +54,6 @@ export default async function handler(req, res) {
       html,
       preset,
       waitUntil,
-      upload,
     });
 
     return res.status(200).json({
@@ -63,7 +62,6 @@ export default async function handler(req, res) {
       bytes: result.bytes,
       encoding: result.encoding,
       image: result.image,
-      cloudinary: result.cloudinary,
       source: result.source,
       preset: result.preset,
       durationMs: result.durationMs,

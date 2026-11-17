@@ -1,6 +1,6 @@
 # Snappy
 
-DB-less full-page screenshot API. Pass a **URL** or **HTML** plus an optional **preset** JSON for viewport/device sizing. Always returns a portable PNG payload other servers can store or forward; optionally uploads to Cloudinary when asked.
+DB-less full-page screenshot API. Pass a **URL** or **HTML** plus an optional **preset** JSON for viewport/device sizing. Returns a portable PNG payload (`base64` / `dataUrl`) that other servers can store or forward.
 
 ## `POST /api`
 
@@ -17,12 +17,11 @@ DB-less full-page screenshot API. Pass a **URL** or **HTML** plus an optional **
     "timezoneId": "UTC",
     "colorScheme": null,
     "stealth": false
-  },
-  "upload": false
+  }
 }
 ```
 
-### Response (always portable)
+### Response
 
 ```json
 {
@@ -34,22 +33,9 @@ DB-less full-page screenshot API. Pass a **URL** or **HTML** plus an optional **
     "base64": "iVBORw0KGgo…",
     "dataUrl": "data:image/png;base64,iVBORw0KGgo…"
   },
-  "cloudinary": null,
   "source": { "type": "url", "url": "https://example.com" },
   "preset": { "viewport": { "width": 390, "height": 844 }, "…": "…" },
   "durationMs": 2140
-}
-```
-
-Use `image.base64` / `image.dataUrl` from another service. Set `"upload": true` (and configure Cloudinary) to also get:
-
-```json
-"cloudinary": {
-  "url": "https://res.cloudinary.com/…/snappy/….png",
-  "publicId": "snappy/…",
-  "bytes": 184220,
-  "width": 1170,
-  "height": 4200
 }
 ```
 
@@ -58,7 +44,6 @@ Use `image.base64` / `image.dataUrl` from another service. Set `"upload": true` 
 | `url` **or** `html` | Exactly one |
 | `preset` | Inline only — nothing is stored |
 | `waitUntil` | `networkidle` (default), `load`, `domcontentloaded` |
-| `upload` | `false` by default; Cloudinary only when `true` |
 
 Auth: if `API_SECRET` is set, send `Authorization: Bearer <API_SECRET>`.
 
@@ -72,7 +57,7 @@ Bad requests return `400` with what went wrong, what was received, and the expec
   "error": "Invalid payload",
   "issues": [
     "Provide exactly one of url or html (non-empty string)",
-    "Unknown field(s): device. Allowed: url, html, preset, waitUntil, upload"
+    "Unknown field(s): device. Allowed: url, html, preset, waitUntil"
   ],
   "received": { "device": "iPhone 14" },
   "expected": {
@@ -82,8 +67,7 @@ Bad requests return `400` with what went wrong, what was received, and the expec
       "url": "https://example.com",
       "html": null,
       "preset": { "viewport": { "width": 1280, "height": 720 }, "…": "…" },
-      "waitUntil": "networkidle",
-      "upload": false
+      "waitUntil": "networkidle"
     },
     "notes": [
       "Send either url or html (exactly one).",
@@ -109,8 +93,6 @@ npx vercel dev
 
 ```env
 API_SECRET=
-# Only needed when upload=true
-CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
 CORS_ORIGIN=*
 AWS_LAMBDA_JS_RUNTIME=nodejs22.x
 ```

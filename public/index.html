@@ -30,7 +30,7 @@
   </head>
   <body>
     <h1>Snappy</h1>
-    <p>DB-less full-page screenshots. Pass URL or HTML + preset JSON. Returns portable base64 (optional Cloudinary upload).</p>
+    <p>DB-less full-page screenshots. Pass URL or HTML + preset JSON. Returns portable base64 / dataUrl.</p>
     <p>POST <code>/api</code></p>
     <pre>{
   "url": "https://example.com",
@@ -38,8 +38,7 @@
     "viewport": { "width": 390, "height": 844 },
     "deviceScaleFactor": 3,
     "isMobile": true
-  },
-  "upload": false
+  }
 }</pre>
   </body>
 </html>
