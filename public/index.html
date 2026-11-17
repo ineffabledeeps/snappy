@@ -13,6 +13,11 @@
         line-height: 1.5;
         color: #111;
       }
+      h2 {
+        font-size: 1rem;
+        margin: 1.75rem 0 0.5rem;
+        font-weight: 600;
+      }
       code {
         background: #f4f4f5;
         padding: 0.1em 0.35em;
@@ -26,19 +31,46 @@
         overflow: auto;
         font-size: 0.85rem;
       }
+      a {
+        color: #2563eb;
+      }
     </style>
   </head>
   <body>
     <h1>Snappy</h1>
-    <p>DB-less full-page screenshots. Pass URL or HTML + preset JSON. Returns portable base64 / dataUrl.</p>
-    <p>POST <code>/api</code></p>
+    <p>
+      DB-less full-page screenshots. Send a <strong>url</strong> or raw
+      <strong>html</strong> (exactly one) plus optional preset JSON. Returns portable
+      <code>image.base64</code> / <code>image.dataUrl</code>.
+    </p>
+    <p>POST <code>/api</code> · <a href="/api">GET /api</a> for per-key hints</p>
+
+    <h2>URL example</h2>
     <pre>{
   "url": "https://example.com",
   "preset": {
     "viewport": { "width": 390, "height": 844 },
     "deviceScaleFactor": 3,
-    "isMobile": true
+    "isMobile": true,
+    "hasTouch": true
   }
 }</pre>
+
+    <h2>HTML example</h2>
+    <pre>{
+  "html": "&lt;!doctype html&gt;&lt;html&gt;&lt;body style='height:2400px;font:24px sans-serif'&gt;Hello from Snappy&lt;/body&gt;&lt;/html&gt;",
+  "preset": {
+    "viewport": { "width": 800, "height": 600 }
+  }
+}</pre>
+
+    <h2>curl</h2>
+    <pre>curl -X POST /api \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+
+curl -X POST /api \
+  -H "Content-Type: application/json" \
+  -d '{"html":"&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;hi&lt;/body&gt;&lt;/html&gt;"}'</pre>
   </body>
 </html>
