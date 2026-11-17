@@ -1,0 +1,23 @@
+{
+  "name": "snappy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-page screenshot API for URL or HTML, with device preset sizing",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "vercel-dev": "vercel dev",
+    "snappy": "node scripts/snappy.js",
+    "build": "node -e \"console.log('API-only project, no build step')\""
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^149.0.0",
+    "@zorilla/playwright-extra": "^2.0.0",
+    "@zorilla/puppeteer-extra": "^2.0.2",
+    "@zorilla/puppeteer-extra-plugin-stealth": "^2.0.1",
+    "cloudinary": "^2.10.0",
+    "playwright-core": "^1.62.1"
+  }
+}

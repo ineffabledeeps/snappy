@@ -1,0 +1,8 @@
+node_modules/
+.vercel/
+.env
+.env.local
+*.png
+snappy-out.png
+.DS_Store
+Thumbs.db
