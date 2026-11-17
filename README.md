@@ -62,6 +62,40 @@ Use `image.base64` / `image.dataUrl` from another service. Set `"upload": true` 
 
 Auth: if `API_SECRET` is set, send `Authorization: Bearer <API_SECRET>`.
 
+### Invalid payload
+
+Bad requests return `400` with what went wrong, what was received, and the expected shape:
+
+```json
+{
+  "success": false,
+  "error": "Invalid payload",
+  "issues": [
+    "Provide exactly one of url or html (non-empty string)",
+    "Unknown field(s): device. Allowed: url, html, preset, waitUntil, upload"
+  ],
+  "received": { "device": "iPhone 14" },
+  "expected": {
+    "method": "POST",
+    "contentType": "application/json",
+    "body": {
+      "url": "https://example.com",
+      "html": null,
+      "preset": { "viewport": { "width": 1280, "height": 720 }, "…": "…" },
+      "waitUntil": "networkidle",
+      "upload": false
+    },
+    "notes": [
+      "Send either url or html (exactly one).",
+      "preset is optional; omit it to use 1280×720 desktop defaults."
+    ],
+    "response": { "success": true, "image": { "base64": "…", "dataUrl": "…" }, "…": "…" }
+  }
+}
+```
+
+`GET /api` returns the same expected request/response docs.
+
 ## Local
 
 ```bash
