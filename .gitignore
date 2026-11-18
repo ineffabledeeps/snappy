@@ -6,3 +6,4 @@ node_modules/
 snappy-out.png
 .DS_Store
 Thumbs.db
+.vercel
